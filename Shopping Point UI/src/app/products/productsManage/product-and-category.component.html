@@ -1,0 +1,237 @@
+
+<div class="container">
+<select *ngIf="isAdmin" class="btn btn-outline-secondary text-dark mb-5 my-1 my-sm-0" [(ngModel)]="componentType"
+    (change)="changeComponentFunctionality()" name="filter">
+    <option value="0">Product Management</option>
+    <option value="1">Category Management</option>
+</select>
+<app-table 
+(parentfunction)="parentfunction($event)"
+[TableTitle]="'Products'" [TitleArray]="['Product Image','Product Name','Company','Price','Stock','Category']" [SerchableArrayIndex]="[1,2]"
+    [categoryArray]="categories" [shouldShow]="shouldshow"
+    [mainArray]="products"
+    [TextEmpty]="'No Products'"
+    ></app-table>
+</div>
+
+    <button style="position: fixed;bottom: 10px;right: 10px;" *ngIf="componentType=='0'&&isAdmin" type="button"
+        class="btn btn-primary" (click)="makeAddproductArea(addeditForm)" data-toggle="modal" data-target="#exampleModalLong">
+        Add Product
+    </button>
+
+
+<div style="width: 100%;padding:10px; position: fixed; bottom: 10px; display: flex; justify-content: space-between;" *ngIf="isAdmin&&componentType=='1'">
+
+    <button type="button" class="btn btn-primary" (click)="makingAddCategoryArea(addeditCatForm)">
+        Add Category
+    </button>
+
+    <button
+        type="button" class="btn btn-danger" (click)="deleteCategory()">
+        Delete Selected Category
+    </button>
+
+    <button type="button"
+        class="btn btn-primary" data-toggle="modal"(click)="makeEditCategoryReady()">
+        Update Selected Category
+    </button>
+</div>
+
+
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+    >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-light" id="exampleModalLongTitle">Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; width:100%" class="mb-2">
+                <img src={{newProduct.imageurl}} style=" width:150px; border-radius: 10px;" alt="">
+                </div>
+                <form #addeditForm="ngForm">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="productName">Product Name*</label>
+                            <input type="text" [disabled]="!isAdmin" class="form-control" [(ngModel)]="newProduct.productName" name="productName"
+                                placeholder="Product Name" required minlength="2" pattern="[a-zA-Z0-9]+[a-zA-Z0-9\s]*"
+                                maxlength="10" #productName="ngModel">
+                            <div id="bookNameHelp" *ngIf="productName.invalid&&productName.touched">
+                                <small class="form-text text-danger" *ngIf="productName.hasError('required')">Product name is
+                                    required</small>
+                                <small class="form-text text-danger" *ngIf="productName.hasError('minlength')">should
+                                    contain alteast 2
+                                    letter</small>
+                                    <small class="form-text text-danger" *ngIf="productName.hasError('maxlength')">should
+                                        contain atmost 10
+                                        letter</small>
+                                <small class="form-text text-danger" *ngIf="productName.hasError('pattern')">Product name
+                                    should be just letter,number and
+                                    space</small>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="productComapny">Product Comapny*</label>
+                            <input type="text" [disabled]="!isAdmin" class="form-control" [(ngModel)]="newProduct.productComapny" name="productComapny"
+                                placeholder="Company" required minlength="2" pattern="[a-zA-Z0-9]+[a-zA-Z0-9\s]*"
+                                maxlength="10" #productComapny="ngModel" >
+                            <div id="authorHelp" *ngIf="productComapny.invalid&&productComapny.touched">
+                                <small class="form-text text-danger" *ngIf="productComapny.hasError('required')">company name
+                                    is required</small>
+                                <small class="form-text text-danger" *ngIf="productComapny.hasError('minlength')">should
+                                    contain alteast 2
+                                    letter</small>
+                                    <small class="form-text text-danger" *ngIf="productComapny.hasError('maxlength')">should
+                                        contain atmost 10
+                                        letter</small>
+                                <small class="form-text text-danger" *ngIf="productComapny.hasError('pattern')">Company name
+                                should be just letter,number and
+                                space</small>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="DOM">Date Of Manufacture*</label>
+                            <input type="date" [disabled]="!isAdmin" class="form-control" [(ngModel)]="newProduct.dateOfManuFacture" name="DOM"
+                                placeholder="Date Of Manufacture" required
+                                [max]="mindate"
+                                #DOM="ngModel">
+                            <div id="DOMhelp" *ngIf="DOM.invalid&&DOM.touched">
+                                <small class="form-text text-danger" *ngIf="DOM.hasError('required')">Date Of Manufacture is
+                                    required</small>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="Price">Price*</label>
+                            <input [disabled]="!isAdmin" type="number" class="form-control" [(ngModel)]="newProduct.price" name="Price"
+                                placeholder="Price" required min="1"
+                                #Price="ngModel">
+                            <div id="PriceHelp" *ngIf="Price.invalid&&Price.touched">
+                                <small class="form-text text-danger" *ngIf="Price.hasError('required')">Price
+                                    is required</small>
+                                <small class="form-text text-danger" *ngIf="Price.hasError('min')">value should
+                                    be greater than 0</small>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-row">
+                        <div  class="form-group col-md-6">
+                            <label for="category">Category*</label>
+                            <select class="custom-select" [disabled]="!isAdmin" [(ngModel)]="newProduct.categoryId" name="category"
+                                required #category="ngModel">
+                                <option *ngFor="let a of allCategory" value="{{a.id}}">{{a.categoryName}}</option>
+                                
+                            </select>
+                            <small id="categoryHelp" *ngIf="category.invalid&&category.touched"
+                                class="form-text text-danger">Select One</small>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="Quantity">Stock Quantity*</label>
+                            <input type="number" [disabled]="!isAdmin" class="form-control" [(ngModel)]="newProduct.quantity" name="Quantity" placeholder="Stock Quantity"
+                                required min="0" #Quantity="ngModel">
+                            <div id="QuantityHelp" *ngIf="Quantity.invalid&&Quantity.touched">
+                                <small class="form-text text-danger" *ngIf="Quantity.hasError('required')">Quantity
+                                    is required</small>
+                                <small class="form-text text-danger" *ngIf="Quantity.hasError('min')">value should
+                                    be greater than 0</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="description">Description*</label>
+                            <textarea style="width: 100%;" [disabled]="!isAdmin" [(ngModel)]="newProduct.description" name="description" minlength="50" required #description="ngModel" maxlength="100">
+                            </textarea>
+                            <div id="deschelp" *ngIf="description.invalid&&description.touched">
+                                <small class="form-text text-danger" *ngIf="description.hasError('required')">Description
+                                    is required</small>
+                                <small class="form-text text-danger" *ngIf="description.hasError('minlength')">value should
+                                    be greater than 50 character</small>
+                                    <small class="form-text text-danger" *ngIf="description.hasError('maxlength')">value should
+                                        be less than 100 character</small>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6"  >
+                            <label for="fileInput">Photo <span *ngIf="!isEditing"> (default photo is above)</span></label>
+                            <div>
+                             <input type="file" class="btn btn-primary" style="width: 100%;" [(ngModel)]="imgfiedmainatiner" (change)="onFileSelected($event)" name="fileInput" #fileInput="ngModel">
+                            </div>
+                        </div> 
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" *ngIf="!isEditing&&isAdmin" class="btn btn-primary" data-dismiss="modal"
+                    [disabled]="addeditForm.invalid" id="addbutton" (click)="addProduct()">ADD</button>
+                <button type="button" *ngIf="isEditing&&isAdmin" class="btn btn-primary" data-dismiss="modal"
+                    [disabled]="addeditForm.invalid" id="editbutton" (click)="editProduct()">EDIT</button>
+                <button type="button" *ngIf="isEditing&&isAdmin" class="btn btn-danger" data-dismiss="modal"
+                    [disabled]="addeditForm.invalid" id="deletebutton" (click)="deleteProduct()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade bd-example-modal-sm" id="categoryManageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-light" id="exampleModalLongTitle">Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #addeditCatForm="ngForm">
+                    <div class="form-row">
+                            <label for="categoryName">Category Name*</label>
+                            <input width="100%" type="text" [disabled]="!isAdmin" class="form-control"
+                                [(ngModel)]="newCategory.categoryName" name="categoryName" placeholder="Category Name"
+                                required minlength="2" pattern="^[a-zA-Z][a-zA-Z\s]*$" maxlength="15"
+                                #categoryName="ngModel">
+                            <div id="bookNameHelp" *ngIf="categoryName.invalid&&categoryName.touched">
+                                <small class="form-text text-danger" *ngIf="categoryName.hasError('required')">Category
+                                    name is
+                                    required</small>
+                                <small class="form-text text-danger" *ngIf="categoryName.hasError('minlength')">should
+                                    contain alteast 2
+                                    letter</small>
+                                <small class="form-text text-danger" *ngIf="categoryName.hasError('pattern')">Category
+                                    name should be just letter and
+                                    space</small>
+                            
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" *ngIf="!isEditing&&isAdmin" class="btn btn-primary" data-dismiss="modal"
+                    [disabled]="addeditCatForm.invalid" (click)="addCategory()">ADD</button>
+                <button type="button" *ngIf="isEditing&&isAdmin" class="btn btn-primary" data-dismiss="modal"
+                    [disabled]="addeditCatForm.invalid" (click)="editCategory()">EDIT</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<button id="openModalButton" [hidden]="true" data-toggle="modal" data-target="#exampleModalLong">Open Modal</button>
+<button id="openModalButton2" [hidden]="true" data-toggle="modal" data-target="#categoryManageModal">Open Modal</button>
+
+<div *ngIf="loading" style="position: absolute;left: 50%;top: 50%;">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>

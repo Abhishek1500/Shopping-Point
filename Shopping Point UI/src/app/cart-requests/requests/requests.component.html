@@ -1,0 +1,106 @@
+<!-- <app-navbar></app-navbar> -->
+<div class="container">
+    <app-table (parentfunction)="parentfunction($event)" [TableTitle]="'Pending Requests'"
+        [TitleArray]="['Product Image','Product Name','Company','User Email','User Name','Asked Quantity','Category']" [SerchableArrayIndex]="[1,2]"
+        [categoryArray]="categories" [shouldShow]="true" [mainArray]="tableFormatCart"
+        [TextEmpty]="'No Requests'">
+    </app-table>
+
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-dark">
+                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div style="text-align: center; width:100%" class="mb-2">
+                        <img src={{araeMaintainer.imageurl}} style=" width:150px; border-radius: 10px;" alt="">
+                    </div>
+                    <form #addeditForm="ngForm">
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="DOM">User Email</label>
+                                <input type="text" [disabled]="true" class="form-control" [(ngModel)]="araeMaintainer.userEmail" name="DOM"
+                                    placeholder="Last Updated">
+                        
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Price">User Name</label>
+                                <input [disabled]="true" type="text" class="form-control" [(ngModel)]="araeMaintainer.userName" name="Price"
+                                    placeholder="Name">
+                        
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="productName">Product Name</label>
+                                <input type="text" [disabled]="true" class="form-control"
+                                    [(ngModel)]="araeMaintainer.productName" name="productName">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="productComapny">Product Comapny</label>
+                                <input type="text" [disabled]="true" class="form-control"
+                                    [(ngModel)]="araeMaintainer.productCompany" name="productComapny"
+                                    placeholder="Company">
+
+                            </div>
+                        </div>
+
+
+                        
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="Quantity">Category Name</label>
+                                <input type="text" [disabled]="true" class="form-control"
+                                    value="{{araeMaintainer.categoryName}}" name="Quantity" placeholder="Category Name">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Quantity">Asked Quantity</label>
+                                <input type="number" [disabled]="true" class="form-control"
+                                    [(ngModel)]="araeMaintainer.count" name="Quantity" placeholder="Quantity Provided">
+                            </div>
+                        </div>
+
+                        
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="Quantity">Requested On</label>
+                                <input type="date" [disabled]="true" class="form-control" value="{{araeMaintainer.lastUpdated}}"
+                                    name="Quantity" placeholder="Category Name">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Quantity">Remark</label>
+                                <textarea  class="form-control" [(ngModel)]="araeMaintainer.remark" 
+                                    placeholder="Optional remark for reject" name="val"></textarea>
+                            </div>
+                        </div>
+                        
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                        (click)="approve()">Approve</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" [disabled]="addeditForm.invalid"
+                        (click)="reject()">Reject</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button id="openModalButton" [hidden]="true" data-toggle="modal" data-target="#exampleModalLong">Open Modal</button>
+</div>
+
+<div *ngIf="loading" style="position: absolute;left: 50%;top: 50%;">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>

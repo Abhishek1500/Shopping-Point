@@ -1,0 +1,54 @@
+    <div style="display: flex; justify-content: space-between;">
+        <h3>{{TableTitle}}</h3>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" placeholder="Search" [(ngModel)]="filteringinfo.serched"
+                (keyup)="paginateNow(pageinfo.currentPage)" aria-label="Search" name="search">
+            <select class="btn btn-outline-secondary text-dark my-1 my-sm-0 mr-sm-2" [(ngModel)]="filteringinfo.filter"
+                (change)="paginateNow(pageinfo.currentPage)" name="filter1">
+                <option value="" selected>Filter Choice</option>
+                <option *ngFor="let i of SerchableArrayIndex" value="{{i}}">{{TitleArray[i]}}</option>
+            </select>
+            <select class="btn btn-outline-secondary text-dark my-1 my-sm-0" [(ngModel)]="filteringinfo.category"
+                id="temp" (change)="paginateNow(pageinfo.currentPage)" name="filter2">
+                <option value="" selected>Category</option>
+                <option *ngFor="let i of categoryArray" value="{{i}}">{{i}}</option>
+            </select>
+        </form>
+    </div>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" class="text-center" *ngFor="let a of TitleArray">{{a}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            <tr *ngFor="let element of filteredPaginatedData">
+                <td  class="text-center" style="width: 20%"><img (click)="parentfunction.emit(element[0])" style="width: 30%; border-radius: 20px;" [ngStyle]="{'cursor':(shouldShow?'pointer':'')}" src={{element[1]}} alt="product img"></td>
+                <td class="text-center"  *ngFor="let a of element |slice:2; let i=index">{{a}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <small *ngIf="shouldShow&&pageinfo.pagepossibe>0">Click on Image for further process</small>
+    <nav aria-label="...">
+        <ul class="pagination pagination-sm" *ngIf="pageinfo.pagepossibe>0">
+            <li class="page-item" *ngFor="let in of [].constructor(pageinfo.pagepossibe),let i=index">
+                <a class="page-link" [ngStyle]="{'color': i+1 === pageinfo.currentPage ? 'blue' : 'black'}"
+                    (click)="paginateNow(i+1)">{{i+1}}</a>
+            </li>
+            <select class=" page-item ml-5 pl-1" name="" (change)="paginateNow(1)" [(ngModel)]="pageinfo.perpageentity"
+                id="">
+                <option value="4">4</option>
+                <option value="8">8</option>
+                <option value="12">12</option>
+            </select> <span class="ml-2">Entity per Page</span>
+        </ul>
+    </nav>
+
+<h1 style="text-align: center;" *ngIf="filteredPaginatedData.length==0">{{TextEmpty}}</h1>
+
+<div *ngIf="loading" style="position: absolute;left: 50%;top: 50%;">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+
+<div class="card container p-3" style="width: 350px; background-color: rgb(250,250,250);">
+<div class="container" style="max-width: 300px;">
+<form #loginForm="ngForm">
+    <div class="form-group">
+        <label for="usernameInput">Email</label>
+        <input type="text"  #userEmailInput="ngModel" [(ngModel)]="useremail" 
+        class="form-control" name="userEmailInput"
+        required pattern="^[A-Z0-9a-z+_.-]+@[A-Z0-9a-z.-]+$"
+        minlength="3" maxlength="30"
+            placeholder="email">
+        <div id="userEmailHelp" *ngIf="userEmailInput.invalid&&userEmailInput.touched">
+            <small class="form-text text-danger" *ngIf="userEmailInput.hasError('required')">Email is required</small>
+            <small class="form-text text-danger" *ngIf="userEmailInput.hasError('minlength')">should contain alteast 3 letter</small>
+            <small class="form-text text-danger" *ngIf="userEmailInput.hasError('pattern')">Email pattern is Invalid</small>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="passwordInput">Password</label>
+        <input type="password" #passwordInput="ngModel"
+        [(ngModel)]="password" class="form-control" name="passwordInput" 
+        placeholder="Password" required
+        pattern="^[a-zA-Z]+[\.]*[^\s]+$"  minlength="8" maxlength="20">
+        <div id="passwordHelp"  *ngIf="passwordInput.invalid&&passwordInput.touched">
+        <small class="form-text text-danger" *ngIf="passwordInput.hasError('required')">Password is required</small>
+        <small class="form-text text-danger" *ngIf="passwordInput.hasError('minlength')">Password length should be greater than 7</small>
+        <small class="form-text text-danger" *ngIf="passwordInput.hasError('pattern')">password pattern is Invalid (no space and start with char)</small>
+        </div>
+    </div>
+    <div *ngIf="loading" class="spinner-grow text-primary ml-3" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <button type="submit"  class="btn btn-primary"  *ngIf="!loading" [disabled]="loginForm.invalid" (click)="loginUser()">Login</button><br>
+    <small>click here to <a routerLink="/register" style="color: blue">Register</a></small>
+</form>
+</div>
+</div>

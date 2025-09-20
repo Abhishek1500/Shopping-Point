@@ -1,0 +1,15 @@
+
+<!-- <app-navbar></app-navbar> -->
+<div class="container">
+    <app-table [TableTitle]="'Pending Requests'"
+        [TitleArray]="['Product Image','Product Name','Company','Price INR', 'Quantity','Requested On','Category']" [SerchableArrayIndex]="[1,2]"
+        [categoryArray]="categories" [shouldShow]="false" [mainArray]="tableFormatCart"
+        [TextEmpty]="'No Requests'">
+    </app-table>
+</div>
+
+<div *ngIf="loading" style="position: absolute;left: 50%;top: 50%;">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>

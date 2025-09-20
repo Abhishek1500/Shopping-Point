@@ -1,0 +1,40 @@
+.product-card {
+    border: 2px solid #e5e5e5;
+    /* Adjust the border thickness */
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    width: 260px;
+        /* Adjust the maximum width as needed */
+}
+
+.product-card img {
+    height: 150px;
+    object-fit: cover;
+}
+
+.product-card-body {
+    padding: 15px;
+}
+
+.product-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 14px;
+    /* Adjust the font size as needed */
+}
+
+.product-details p {
+    margin: 0;
+}
+
+.input-group {
+    margin-top: 10px;
+}
+
+.from-form {
+    max-width: 70px;
+    /* Adjust the width of the input field */
+}

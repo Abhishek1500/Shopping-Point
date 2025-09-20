@@ -1,0 +1,40 @@
+<div class="product-card">
+    <div style="margin: auto;text-align: center;">
+    <img src={{product.imageurl+request.imageurl}} alt="Product Image">
+    </div>
+    <div class="product-card-body">
+        <h5 class="card-title">{{product.productName+request.productName}}</h5>
+        <div class="product-details">
+            <p>Brand: {{product.productCompany+request.productCompany}}</p>
+            <p>Price: Rs.{{product.price+request.price}}</p>
+        </div>
+        <div class="product-details">
+            <p>{{product.categoryName+request.categoryName}}</p>
+            <p *ngIf="isCart">order: {{request.count}} units</p>
+            <p *ngIf="!isCart">Stock: {{product.quantity==0?"Out Of Stock":(product.quantity+" units")}} </p>
+        </div>
+        <div class="product-details">
+            <p>Mfd: {{product.dateOfManuFacture|date:"dd MMM yyyy"}}</p>
+        </div>
+        <p class="card-text" style="font-size: 12px;word-wrap: break-word; height:50px" *ngIf="!isCart">{{product.description}}</p>
+        
+        <div *ngIf="isCart" class="product-details">
+            <p>total Price: {{request.price*request.count}}</p>
+        </div>
+        <form style="position: relative;bottom: 0;">
+            
+        <div  *ngIf="!isCart" style="display: flex; align-content: center;">
+             Qty:
+            <div class="ml-2">
+             <input type="number" style="max-width: 50px;" placeholder="Qty" [(ngModel)]="qtyinput" name="qty">
+            </div>
+        </div>
+        <small class="text-danger" *ngIf="qtyinput<0">should be greater than 0</small>
+        <div class="btn-group mt-2" role="group" aria-label="Product Actions"
+            style="display: flex;justify-content: space-between;">
+            <button (click)="onBlueClick()" [disabled]="(qtyinput<=0&&!isCart)" class="btn btn-primary text-light mr-2">{{BlueButtonString}}</button>
+            <button (click)="onRedClick()" [disabled]="(qtyinput<=0&&!isCart)" class="btn btn-danger text-light">{{RedButtonString}}</button>
+        </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+<!-- <app-navbar></app-navbar> -->
+<div class="container">
+    <app-table [TableTitle]="'Request History'"
+        [TitleArray]="['Product Image','Product Name','Company','Price','Quantity','Status','Remark','Responded On','Category']"
+        [SerchableArrayIndex]="[1,2,4]" [categoryArray]="categories" [shouldShow]="false" [mainArray]="tableFormatCart"
+        [TextEmpty]="'No History'"
+        >
+    </app-table>
+</div>
+
+<div *ngIf="loading" style="position: absolute;left: 50%;top: 50%;">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
